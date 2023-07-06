@@ -64,12 +64,16 @@ const BannerDetails: FunctionComponent<Props> = ({
           position: relative;
         `}
       >
-        <Image
-          src={cover as string}
-          fill
-          alt="Banner Image"
-          style={{ objectFit: "cover" }}
-        />
+        {cover && (
+          <Image
+            src={cover as string}
+            fill
+            alt="Banner Image"
+            style={{ objectFit: "cover" }}
+            priority
+            sizes="100%"
+          />
+        )}
       </div>
       <div
         css={css`
@@ -83,12 +87,16 @@ const BannerDetails: FunctionComponent<Props> = ({
           position: relative;
         `}
       >
-        <Image
-          src={banner as string}
-          fill
-          alt="Banner Image"
-          style={{ objectFit: "cover" }}
-        />
+        {banner && (
+          <Image
+            src={banner as string}
+            fill
+            alt="Banner Image"
+            style={{ objectFit: "cover" }}
+            priority
+            sizes="100%"
+          />
+        )}
       </div>
     </div>
   );

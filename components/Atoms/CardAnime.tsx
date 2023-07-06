@@ -60,17 +60,21 @@ const CardAnime: FunctionComponent<Props> = ({ onClick, item, remove }) => {
         css={css`
           background: #fff;
           height: 155px;
-          width: 104px;
+          min-width: 104px;
           cursor: pointer;
           position: relative;
         `}
       >
-        <Image
-          src={item.coverImage.large}
-          alt="Cover image"
-          style={{ objectFit: "cover" }}
-          fill
-        />
+        {item.coverImage.large && (
+          <Image
+            src={item.coverImage.large}
+            alt="Cover image"
+            style={{ objectFit: "cover" }}
+            fill
+            priority={true}
+            sizes="100%"
+          />
+        )}
       </div>
       <div
         css={css`

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import CardWrapper from "../Atoms/CardWrapper";
 
 import { colors } from "@/assets/colors";
@@ -37,15 +37,6 @@ const Navbar = () => {
   // path
   const path = usePathname();
 
-  const setParams = (e: string) => {
-    dispatch({
-      type: "SET_ANIME_PARAMS",
-      payload: {
-        search: e,
-      },
-    });
-  };
-
   useEffect(() => {
     if (path.includes("anime-list")) {
       dispatch({
@@ -62,6 +53,7 @@ const Navbar = () => {
         },
       });
     }
+    console.log(path);
   }, []);
 
   return (
@@ -87,17 +79,10 @@ const Navbar = () => {
               color: ${colors.secondary};
               cursor: pointer;
             `}
-            onClick={() => handleChangePage("collection")}
+            onClick={() => handleChangePage("anime-list")}
           >
             Top Anime
           </span>
-          <span
-            css={css`
-              border-right: 1px solid ${colors.stroke};
-              height: 32.83px;
-            `}
-          ></span>
-          <Search onChange={(e) => setParams(e)} />
         </div>
         <div>
           <ButtonMenu

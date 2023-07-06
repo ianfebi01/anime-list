@@ -5,6 +5,7 @@ import Button from "@/components/Atoms/Button";
 import CollectionList from "@/components/Molecules/CollectionList";
 import ModalAddNewCollection from "@/components/Organisms/ModalAddNewCollection";
 import ModalDelete from "@/components/Organisms/ModalDelete";
+import ModalEditCollection from "@/components/Organisms/ModalEditCollection";
 import { Collections } from "@/types/collections";
 import { css } from "@emotion/react";
 import { useRouter } from "next/navigation";
@@ -84,6 +85,29 @@ export default function Page({ params }: { params: { slug: string } }) {
     setShow(false);
   };
 
+  // edit collection
+
+  const [selectedDCollection, setSelectedDCollection] = useState<Collections>();
+
+  const handleClickEdit = (data: Collections) => {
+    setSelectedDCollection(data);
+    setShowModalEdit(true);
+  };
+
+  const editCollection = async (data: Collections) => {
+    setSelectedDCollection(data);
+    const tmp: Collections[] | undefined = collection;
+
+    const index = await tmp?.findIndex((item) => item.id === data?.id);
+    if (index != -1) {
+      if (tmp) {
+        tmp[index as number].name = data.name;
+        setShowModalEdit(false);
+        setSelectedDCollection(undefined);
+      }
+    }
+  };
+
   // maping collection
   const [datassss, setDatassss] = useState<Collections[]>();
   const collectionMap = () => {
@@ -103,6 +127,9 @@ export default function Page({ params }: { params: { slug: string } }) {
     setCollectionFromStorage();
   };
 
+  // modal edit collection
+  const [showModalEdit, setShowModalEdit] = useState<boolean>(false);
+
   return (
     <div
       css={css`
@@ -112,7 +139,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         flex-direction: column;
         align-items: center;
         margin-top: 52.83px;
-        padding: 30px 20px;
+        padding: 0px 0px;
       `}
     >
       <ModalDelete
@@ -125,6 +152,13 @@ export default function Page({ params }: { params: { slug: string } }) {
         show={showModalCollection}
         disable={false}
         setShow={() => handleHiddenModalAddNewCollection()}
+      />
+      <ModalEditCollection
+        show={showModalEdit}
+        disable={false}
+        setShow={() => setShowModalEdit(false)}
+        data={selectedDCollection as Collections}
+        setData={(e) => editCollection(e)}
       />
       <div
         css={css`
@@ -172,7 +206,13 @@ export default function Page({ params }: { params: { slug: string } }) {
         <div
           css={css`
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr;
+            ${mq[0]} {
+              grid-template-columns: 1fr 1fr;
+            }
+            ${mq[2]} {
+              grid-template-columns: 1fr 1fr 1fr;
+            }
             gap: 10px;
           `}
         >
@@ -182,6 +222,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 data={item}
                 onClick={() => router.push("collection/" + item?.id)}
                 remove={() => enableModalDelete(item.id as string)}
+                edit={() => handleClickEdit(item)}
               />
             </div>
           ))}

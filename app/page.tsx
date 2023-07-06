@@ -1,26 +1,16 @@
 "use client";
-import Image from "next/image";
-import styles from "./page.module.css";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { DefaultContext } from "@/context/defaultContext";
-
 import GET_ANIME from "@/graphql/queries/getAnimeList.gql";
-import GET_ANIME_BY_ID from "@/graphql/queries/getAnimeById.gql";
-
-import { Anime, AnimePage, AnimeParams } from "@/types/animeList";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { Anime, AnimePage } from "@/types/animeList";
+import { useLazyQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { breakpoints, mq } from "@/assets/breakpoint";
-
 import CardAnime from "@/components/Atoms/CardAnime";
-
-import LoaderOverlay from "@/components/Molecules/LoaderOverlay";
 import Pagination from "@/components/Molecules/Pagination";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
-import { colors } from "@/assets/colors";
-import CardAnimeSkeleton from "@/components/Atoms/CardAnimeSkeleton";
 import AnimeListSkeleton from "@/components/Molecules/AnimeListSkeleton";
+import Search from "@/components/Atoms/Search";
 
 export default function Home() {
   const { state, dispatch } = useContext(DefaultContext);
@@ -89,6 +79,17 @@ export default function Home() {
     }
   };
 
+  // search
+  const setParams = (e: string) => {
+    dispatch({
+      type: "SET_ANIME_PARAMS",
+      payload: {
+        search: e,
+        page: 1,
+      },
+    });
+  };
+
   return (
     <main
       css={css`
@@ -105,6 +106,7 @@ export default function Home() {
         padding: 20px 20px;
       `}
     >
+      <Search onChange={(e) => setParams(e)} />
       {loading ? (
         <AnimeListSkeleton />
       ) : (

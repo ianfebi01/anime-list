@@ -68,7 +68,7 @@ const ModalEditCollection: FunctionComponent<Props> = ({
           throw new Error("Collection Name alredy taken");
         }
       }
-      toast.success("Success add new collection");
+      toast.success("Success edit collection");
       setCollectionName("");
       setErrorMessage("");
       setShow(false);
@@ -115,13 +115,15 @@ const ModalEditCollection: FunctionComponent<Props> = ({
             width: 100%;
           `}
         >
-          <Input
-            id="collection-input"
-            placeholder="Add name of collection"
-            errorMessage={errorMessage}
-            value={collectionName}
-            onChange={(e) => setCollectionName(e)}
-          />
+          {collectionName != undefined && (
+            <Input
+              id="collection-input"
+              placeholder="Add name of collection"
+              errorMessage={errorMessage}
+              value={collectionName}
+              onChange={(e) => setCollectionName(e)}
+            />
+          )}
         </div>
         <button
           type="submit"

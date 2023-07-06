@@ -11,10 +11,11 @@ const Search: FunctionComponent<Props> = ({ onChange }) => {
     onChange(e);
   }, 500);
   return (
-    <div>
+    <div css={css``}>
       <input
         css={css`
           height: 32.83px;
+          width: 100%;
           padding: 0 10px;
           border: 1px solid ${colors.stroke};
           outline: none;

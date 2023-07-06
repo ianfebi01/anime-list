@@ -136,7 +136,6 @@ export default function Page({ params }: { params: { slug: string } }) {
           flex-direction: column;
           position: relative;
           flex-grow: 1;
-          gap: 20px;
         `}
       >
         <div
@@ -174,7 +173,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             padding: 10px 0;
             z-index: 10;
             border-bottom: 1.5px solid ${colors.stroke};
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;

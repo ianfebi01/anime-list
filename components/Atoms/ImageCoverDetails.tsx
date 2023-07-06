@@ -29,12 +29,16 @@ const ImageCoverDetails: FunctionComponent<Props> = ({ cover }) => {
       `}
       className="border-16"
     >
-      <Image
-        src={cover as string}
-        fill
-        alt="Banner Image"
-        style={{ objectFit: "cover" }}
-      />
+      {cover && (
+        <Image
+          src={cover as string}
+          fill
+          alt="Banner Image"
+          style={{ objectFit: "cover" }}
+          priority
+          sizes="100%"
+        />
+      )}
     </div>
   );
 };

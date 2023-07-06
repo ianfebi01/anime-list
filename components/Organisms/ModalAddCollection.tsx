@@ -228,7 +228,7 @@ const ModalAddCollection: FunctionComponent<Props> = ({
         `}
       >
         <InputSelect
-          id="select-collection"
+          id="select"
           option={option}
           onChange={(e) => setSelectValue(e as SelectOption[])}
           value={selectValue}
