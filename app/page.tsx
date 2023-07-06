@@ -55,7 +55,6 @@ export default function Home() {
 
   // pagination
   const handleClickNext = () => {
-    console.log("click");
     if (data?.Page?.pageInfo?.currentPage) {
       dispatch({
         type: "SET_ANIME_PARAMS",
@@ -66,7 +65,6 @@ export default function Home() {
     }
   };
   const handleClickPrevious = () => {
-    console.log("click");
     if (data?.Page?.pageInfo?.currentPage) {
       if (data?.Page?.pageInfo?.currentPage > 1) {
         dispatch({

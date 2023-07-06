@@ -53,7 +53,6 @@ const Navbar = () => {
         },
       });
     }
-    console.log(path);
   }, []);
 
   return (
