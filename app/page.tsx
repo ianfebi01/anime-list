@@ -1,95 +1,162 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import Image from "next/image";
+import styles from "./page.module.css";
+import { Fragment, useContext, useEffect, useState } from "react";
+import { DefaultContext } from "@/context/defaultContext";
+
+import GET_ANIME from "@/graphql/queries/getAnimeList.gql";
+import GET_ANIME_BY_ID from "@/graphql/queries/getAnimeById.gql";
+
+import { Anime, AnimePage, AnimeParams } from "@/types/animeList";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { css } from "@emotion/react";
+import { breakpoints, mq } from "@/assets/breakpoint";
+
+import CardAnime from "@/components/Atoms/CardAnime";
+
+import LoaderOverlay from "@/components/Molecules/LoaderOverlay";
+import Pagination from "@/components/Molecules/Pagination";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import { colors } from "@/assets/colors";
+import CardAnimeSkeleton from "@/components/Atoms/CardAnimeSkeleton";
+import AnimeListSkeleton from "@/components/Molecules/AnimeListSkeleton";
 
 export default function Home() {
+  const { state, dispatch } = useContext(DefaultContext);
+
+  // Get Data
+  const [getData, { data, loading }] = useLazyQuery<AnimePage>(GET_ANIME, {
+    variables: {
+      ...state.defaultState?.animeParams,
+    },
+    onCompleted(datas) {
+      dispatch({
+        type: "SET_ANIME_DATAS",
+        payload: {
+          ...datas,
+        },
+      });
+    },
+  });
+
+  useEffect(() => {
+    getData({
+      variables: {
+        ...state.defaultState?.animeParams,
+      },
+    });
+  }, [state.defaultState?.animeParams]);
+
+  // remove initial loader
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const loader = document.getElementById("globalLoader");
+      if (loader) loader.remove();
+    }
+  }, []);
+
+  // route
+  const router = useRouter();
+
+  const handleClickCard = (id: number) => {
+    router.push(`/anime-details/${id}`);
+  };
+
+  // pagination
+  const handleClickNext = () => {
+    console.log("click");
+    if (data?.Page?.pageInfo?.currentPage) {
+      dispatch({
+        type: "SET_ANIME_PARAMS",
+        payload: {
+          page: data?.Page?.pageInfo?.currentPage + 1,
+        },
+      });
+    }
+  };
+  const handleClickPrevious = () => {
+    console.log("click");
+    if (data?.Page?.pageInfo?.currentPage) {
+      if (data?.Page?.pageInfo?.currentPage > 1) {
+        dispatch({
+          type: "SET_ANIME_PARAMS",
+          payload: {
+            page: data?.Page?.pageInfo?.currentPage - 1,
+          },
+        });
+      }
+    }
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main
+      css={css`
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow: scroll;
+        ${mq[3]} {
+          max-width: ${breakpoints[3]}px;
+        }
+        margin-top: 52.83px;
+        padding: 20px 20px;
+      `}
+    >
+      {loading ? (
+        <AnimeListSkeleton />
+      ) : (
+        <div
+          css={css`
+            display: flex;
+            flex-direction: column;
+            position: relative;
+
+            flex-grow: 1;
+          `}
+        >
+          <div
+            css={css`
+              display: grid;
+              gap: 10px;
+              grid-template-columns: auto;
+              ${mq[0]} {
+                grid-template-columns: auto auto;
+              }
+              ${mq[1]} {
+                grid-template-columns: auto auto;
+              }
+              ${mq[2]} {
+                grid-template-columns: auto auto;
+              }
+            `}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+            {state.defaultState?.animeList?.Page?.media?.map((item: Anime) => {
+              return (
+                <CardAnime
+                  key={item?.id}
+                  item={item}
+                  onClick={() => handleClickCard(item.id)}
+                />
+              );
+            })}
+          </div>
+
+          <div
+            css={css`
+              margin: 20px 0;
+            `}
+          >
+            <Pagination
+              pageInfo={state?.defaultState?.animeList?.Page?.pageInfo}
+              handleClickNext={() => handleClickNext()}
+              handleClickPrevious={() => handleClickPrevious()}
             />
-          </a>
+          </div>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      )}
     </main>
-  )
+  );
 }
