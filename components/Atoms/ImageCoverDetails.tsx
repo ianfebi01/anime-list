@@ -25,7 +25,7 @@ const ImageCoverDetails: FunctionComponent<Props> = ({ cover }) => {
 
         /* SHADOW */
         box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.2);
-        z-index: 10;
+        z-index: 1;
       `}
       className="border-16"
     >

@@ -20,6 +20,7 @@ const CardWrapper = ({ children, fullWidth = false }: Props) => {
         padding: 10px 20px;
         background: #fff;
         width: ${fullWidth ? "100%" : "fit-content"};
+        z-index: 10;
       `}
       className="shadow"
     >

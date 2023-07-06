@@ -29,7 +29,7 @@ const BannerDetails: FunctionComponent<Props> = ({
           position: absolute;
           top: 10px;
           left: 10px;
-          z-index: 10;
+          z-index: 1;
           background-color: rgba(30, 30, 30, 0.4);
           border-radius: 50%;
           width: 40px;
