@@ -147,7 +147,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             block={false}
             color={colors.secondary}
             primary={false}
-            onClick={() => router.push("/collection")}
+            onClick={() => router.back()}
           >
             <div
               css={css`

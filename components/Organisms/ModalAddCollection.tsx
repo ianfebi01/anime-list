@@ -84,9 +84,6 @@ const ModalAddCollection: FunctionComponent<Props> = ({
     setOption(tmp);
   };
 
-  // selectvalue
-  const [selectValue, setSelectValue] = useState<SelectOption[]>([]);
-
   // add to collection
   const addToCollection = async () => {
     let tmp: Collections[] = collection;
@@ -129,6 +126,10 @@ const ModalAddCollection: FunctionComponent<Props> = ({
     setSelectedValue();
   }, [show]);
 
+  // selectvalue
+  const [selectValue, setSelectValue] = useState<SelectOption[]>([]);
+
+  // set collection already added
   const setSelectedValue = () => {
     let alreadyAdded = [];
     for (const item of collection) {

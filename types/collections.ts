@@ -5,3 +5,8 @@ export interface Collections {
   datas: AnimeDetails[];
   id: string;
 }
+
+export interface CollectionAdded {
+  name: string;
+  id: string;
+}

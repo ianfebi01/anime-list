@@ -13,11 +13,13 @@ import BannerDetails from "@/components/Molecules/BannerDetails";
 import ImageCoverDetails from "@/components/Atoms/ImageCoverDetails";
 import InfoDetailsAnime from "@/components/Molecules/InfoDetailsAnime";
 import AnimeDetailsSkeleton from "@/components/Organisms/AnimeDetailsSkeleton";
+import { CollectionAdded, Collections } from "@/types/collections";
+import { SelectOption } from "@/types/reactSelect";
+import { type } from "os";
 
 export default function Page({ params }: { params: { slug: string } }) {
   // Context
   const { state, dispatch } = useContext(DefaultContext);
-
   const [showModal, setShowModal] = useState<boolean>(false);
 
   // route
@@ -38,6 +40,7 @@ export default function Page({ params }: { params: { slug: string } }) {
           ...datas.Media,
         },
       });
+      setSelectedValue();
     },
   });
   useEffect(() => {
@@ -60,6 +63,65 @@ export default function Page({ params }: { params: { slug: string } }) {
   const handleAddCollection = (data: AnimeDetails) => {
     // localStorage.setItem("collection", JSON.stringify(data));
     setShowModal(true);
+  };
+
+  // set collection
+  const [collection, setCollection] = useState<Collections[]>();
+
+  useEffect(() => {
+    setCollectionFromStorageFirstMount();
+  }, [collection]);
+
+  const setCollectionFromStorageFirstMount = async () => {
+    const tmp: Collections[] = await JSON.parse(
+      localStorage.getItem("collection") as string
+    );
+
+    if (!tmp) {
+      await window.localStorage.setItem("collection", JSON.stringify([]));
+      if (!collection) {
+        setCollection([]);
+      }
+    } else {
+      if (!collection) {
+        setCollection(tmp);
+      }
+    }
+  };
+
+  // set collection already added
+
+  const [selectValue, setSelectValue] = useState<CollectionAdded[]>();
+
+  useEffect(() => {
+    setSelectedValue();
+  }, [selectValue]);
+
+  const setSelectedValue = async () => {
+    let alreadyAdded = [];
+    if (!collection) return;
+    for (const item of collection) {
+      const index = await item.datas.findIndex(
+        (value) => value.id === Number(params.slug)
+      );
+
+      if (index != -1) {
+        alreadyAdded.push({
+          name: item.name,
+          id: item.id,
+        });
+      }
+    }
+    if (!selectValue) {
+      setSelectValue(alreadyAdded);
+    }
+    mapCollectionAdded();
+  };
+  const [collectionAdded, setCollectionAdded] = useState<CollectionAdded[]>();
+
+  const mapCollectionAdded = () => {
+    const tmp = selectValue?.map((item) => item);
+    setCollectionAdded(tmp);
   };
 
   return (
@@ -145,6 +207,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                         state?.defaultState?.animeDetails as AnimeDetails
                       )
                     }
+                    collectionAdded={collectionAdded as CollectionAdded[]}
                   />
                 </div>
               </div>

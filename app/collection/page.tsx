@@ -49,6 +49,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
     collectionMap();
   };
+
   const setCollectionFromStorage = async () => {
     const tmp: Collections[] = await JSON.parse(
       localStorage.getItem("collection") as string

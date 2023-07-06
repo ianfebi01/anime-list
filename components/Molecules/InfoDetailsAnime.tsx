@@ -6,16 +6,23 @@ import Button from "../Atoms/Button";
 import { AnimeDetails } from "@/types/animeList";
 import Genre from "../Atoms/Genre";
 import { mq } from "@/assets/breakpoint";
+import { CollectionAdded } from "@/types/collections";
+import CollectionAllreadyAdded from "../Atoms/CollectionAllreadyAdded";
+import { useRouter } from "next/navigation";
 
 interface Props {
   datas: AnimeDetails;
   handleAddCollection: () => void;
+  collectionAdded: CollectionAdded[];
 }
 
 const InfoDetailsAnime: FunctionComponent<Props> = ({
   datas,
   handleAddCollection,
+  collectionAdded,
 }) => {
+  // rputer
+  const router = useRouter();
   const [showFullDesc, setShowFullDesc] = useState<boolean>(false);
   return (
     <div
@@ -96,6 +103,28 @@ const InfoDetailsAnime: FunctionComponent<Props> = ({
             >
               {" " + " Average Score"}
             </span>
+          </div>
+          <div
+            css={css`
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+              gap: 10px;
+            `}
+          >
+            <span
+              css={css`
+                font-weight: 500;
+                color: ${colors.black};
+              `}
+              className="text-14"
+            >
+              Collection:
+            </span>
+            <CollectionAllreadyAdded
+              data={collectionAdded as CollectionAdded[]}
+              onClick={(id) => router.push("/collection/" + id)}
+            />
           </div>
         </div>
 
