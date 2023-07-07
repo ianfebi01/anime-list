@@ -1,6 +1,5 @@
 # Link Preview
-
-[https://anime-list-azure-zeta.vercel.app/]
+https://anime-list-azure-zeta.vercel.app/
 
 
 
